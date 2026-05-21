@@ -21,14 +21,21 @@ html.dark {
   color: #e8f8ff;
 }
 
+html {
+  touch-action: manipulation;
+  -webkit-text-size-adjust: 100%;
+}
+
 * {
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
   min-width: 320px;
-  min-height: 100vh;
+  min-height: 100dvh;
   margin: 0;
+  overflow: hidden;
   background:
     radial-gradient(
       circle at 20% 0%,
@@ -56,6 +63,17 @@ select {
 
 button {
   cursor: pointer;
+  touch-action: manipulation;
+  transition:
+    transform 180ms ease,
+    opacity 180ms ease,
+    background 220ms ease,
+    color 220ms ease,
+    box-shadow 220ms ease;
+}
+
+button:active {
+  transform: scale(0.97);
 }
 
 button:disabled {
@@ -64,10 +82,14 @@ button:disabled {
 }
 
 .app-shell {
+  display: grid;
+  grid-template-rows: auto 1fr;
   width: min(100%, 820px);
+  height: 100dvh;
   margin: 0 auto;
+  overflow: hidden;
   padding: max(1rem, env(safe-area-inset-top)) 1rem
-    calc(6.5rem + env(safe-area-inset-bottom));
+    calc(5.75rem + env(safe-area-inset-bottom));
 }
 
 .topbar,
@@ -80,7 +102,7 @@ button:disabled {
 .topbar {
   justify-content: space-between;
   gap: 1rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 
 .brand {
@@ -124,6 +146,12 @@ html.dark .intro p {
   font-weight: 700;
 }
 
+.theme-button:hover,
+.ghost-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0.75rem 1.75rem rgba(15, 118, 146, 0.12);
+}
+
 .theme-button,
 .ghost-button {
   background: rgba(255, 255, 255, 0.68);
@@ -142,12 +170,44 @@ html.dark .brand-icon {
   box-shadow: 0 1rem 2rem rgba(2, 132, 199, 0.24);
 }
 
+.primary-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 1.2rem 2.4rem rgba(2, 132, 199, 0.3);
+}
+
 .intro {
   margin-bottom: 1rem;
 }
 
 .screen {
-  min-height: calc(100dvh - 9rem);
+  min-height: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+}
+
+.screen::-webkit-scrollbar {
+  display: none;
+}
+
+.screen-fade-enter-active,
+.screen-fade-leave-active {
+  transition:
+    opacity 220ms ease,
+    transform 260ms cubic-bezier(0.22, 1, 0.36, 1),
+    filter 260ms ease;
+}
+
+.screen-fade-enter-from {
+  opacity: 0;
+  transform: translate3d(0, 0.75rem, 0) scale(0.985);
+  filter: blur(0.25rem);
+}
+
+.screen-fade-leave-to {
+  opacity: 0;
+  transform: translate3d(0, -0.4rem, 0) scale(0.99);
+  filter: blur(0.2rem);
 }
 
 .eyebrow {
@@ -181,6 +241,16 @@ p {
   background: rgba(255, 255, 255, 0.74);
   box-shadow: 0 1.5rem 4rem rgba(15, 118, 146, 0.14);
   backdrop-filter: blur(22px);
+  animation: card-enter 360ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  transition:
+    transform 240ms ease,
+    border-color 240ms ease,
+    background 240ms ease,
+    box-shadow 240ms ease;
+}
+
+.card:hover {
+  transform: translateY(-0.125rem);
 }
 
 html.dark .card {
@@ -213,6 +283,13 @@ html.dark .card {
     #0ea5e9 var(--progress),
     rgba(14, 165, 233, 0.14) 0
   );
+  transition:
+    background 420ms ease,
+    transform 240ms ease;
+}
+
+.water-ring:hover {
+  transform: scale(1.015);
 }
 
 .water-ring > div {
@@ -278,6 +355,10 @@ select {
   background: rgba(255, 255, 255, 0.74);
   color: inherit;
   outline: none;
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    background 180ms ease;
 }
 
 html.dark input,
@@ -309,6 +390,13 @@ select:focus {
   min-height: 4.5rem;
   border-radius: 1rem;
   background: rgba(14, 165, 233, 0.1);
+  transition:
+    transform 180ms ease,
+    background 220ms ease;
+}
+
+.day-cell:hover {
+  transform: translateY(-0.125rem);
 }
 
 .day-cell span {
@@ -326,6 +414,7 @@ select:focus {
   left: 0;
   background: linear-gradient(180deg, #38bdf8, #0ea5e9);
   opacity: 0.62;
+  transition: height 420ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .day-cell.completed i {
@@ -350,6 +439,7 @@ select:focus {
   background: rgba(248, 253, 255, 0.82);
   box-shadow: 0 1rem 3rem rgba(15, 118, 146, 0.22);
   backdrop-filter: blur(22px);
+  animation: nav-enter 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 html.dark .bottom-nav {
@@ -367,6 +457,7 @@ html.dark .bottom-nav {
   border-radius: 1.15rem;
   background: transparent;
   color: #537083;
+  transform-origin: center;
 }
 
 html.dark .bottom-nav button {
@@ -380,6 +471,7 @@ html.dark .bottom-nav button {
     rgba(34, 197, 94, 0.18)
   );
   color: #0369a1;
+  box-shadow: inset 0 0 0 1px rgba(14, 165, 233, 0.12);
 }
 
 html.dark .bottom-nav button.active {
@@ -389,10 +481,49 @@ html.dark .bottom-nav button.active {
 .bottom-nav span {
   font-size: 1.25rem;
   line-height: 1;
+  transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.bottom-nav button.active span {
+  transform: translateY(-0.1rem) scale(1.08);
 }
 
 .bottom-nav strong {
   font-size: 0.76rem;
+}
+
+@keyframes card-enter {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 0.8rem, 0) scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes nav-enter {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 1rem, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    scroll-behavior: auto !important;
+    transition-duration: 1ms !important;
+  }
 }
 
 @media (min-width: 720px) {

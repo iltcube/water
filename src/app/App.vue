@@ -60,26 +60,32 @@ const tabs = [
     </section>
 
     <template v-else>
-      <section v-show="activeTab === 'today'" class="screen">
-        <TodayProgress
-          :summary="waterBalance.currentSummary.value"
-          :portion-ml="portionMl"
-          :portions-per-day="waterBalance.portionsPerDay.value"
-          @drink="waterBalance.addPortion"
-          @undo="waterBalance.undoLastPortion"
-        />
-      </section>
+      <Transition name="screen-fade" mode="out-in">
+        <section v-if="activeTab === 'today'" key="today" class="screen">
+          <TodayProgress
+            :summary="waterBalance.currentSummary.value"
+            :portion-ml="portionMl"
+            :portions-per-day="waterBalance.portionsPerDay.value"
+            @drink="waterBalance.addPortion"
+            @undo="waterBalance.undoLastPortion"
+          />
+        </section>
 
-      <section v-show="activeTab === 'calendar'" class="screen">
-        <HistoryCalendar :summaries="waterBalance.recentSummaries.value" />
-      </section>
+        <section
+          v-else-if="activeTab === 'calendar'"
+          key="calendar"
+          class="screen"
+        >
+          <HistoryCalendar :summaries="waterBalance.recentSummaries.value" />
+        </section>
 
-      <section v-show="activeTab === 'profile'" class="screen">
-        <ProfileForm
-          :profile="waterBalance.profile.value"
-          @save="waterBalance.saveProfile"
-        />
-      </section>
+        <section v-else key="profile" class="screen">
+          <ProfileForm
+            :profile="waterBalance.profile.value"
+            @save="waterBalance.saveProfile"
+          />
+        </section>
+      </Transition>
 
       <nav class="bottom-nav" aria-label="Основная навигация">
         <button
