@@ -1,24 +1,25 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { ref } from "vue";
-import { useColorMode, useOnline } from "@vueuse/core";
+import { useDark, useOnline, useToggle } from "@vueuse/core";
 import ProfileForm from "@/features/profile/ui/ProfileForm.vue";
 import HistoryCalendar from "@/features/water-balance/ui/HistoryCalendar.vue";
 import TodayProgress from "@/features/water-balance/ui/TodayProgress.vue";
 import { useWaterBalance } from "@/features/water-balance/model/use-water-balance";
 
 const online = useOnline();
-const colorMode = useColorMode({ emitAuto: true });
+const isDark = useDark();
+const toggleDark = useToggle(isDark);
 const waterBalance = useWaterBalance();
 const activeTab = ref<"today" | "calendar" | "profile">("today");
 
 const themeLabel = computed(() =>
-  colorMode.value === "dark" ? "Светлая тема" : "Тёмная тема",
+  isDark.value ? "Светлая тема" : "Тёмная тема",
 );
 const portionMl = computed(() => waterBalance.profile.value?.portionMl ?? 500);
 
 const toggleTheme = (): void => {
-  colorMode.value = colorMode.value === "dark" ? "light" : "dark";
+  toggleDark();
 };
 
 const tabs = [
